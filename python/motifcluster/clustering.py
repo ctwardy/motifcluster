@@ -32,9 +32,7 @@ def cluster_spectrum(spectrum, num_clusts):
 
   vects = spectrum["vects"][:, 1:]
   kmeans_plus_plus = KMeans(n_clusters=num_clusts).fit(vects)
-  cluster_assigns = kmeans_plus_plus.labels_
-
-  return cluster_assigns
+  return kmeans_plus_plus.labels_
 
 
 def run_motif_clustering(adj_mat, motif_name,
@@ -132,15 +130,13 @@ def run_motif_clustering(adj_mat, motif_name,
 
   cluster_assigns = cluster_spectrum(spectrum, num_clusts)
 
-  ans = {
-    "adj_mat": adj_mat,
-    "motif_adj_mat": spectrum["motif_adj_mat"],
-    "comps": spectrum["comps"],
-    "adj_mat_comps": spectrum["adj_mat_comps"],
-    "motif_adj_mat_comps": spectrum["motif_adj_mat_comps"],
-    "vals": spectrum["vals"],
-    "vects": spectrum["vects"],
-    "clusts": cluster_assigns
+  return {
+      "adj_mat": adj_mat,
+      "motif_adj_mat": spectrum["motif_adj_mat"],
+      "comps": spectrum["comps"],
+      "adj_mat_comps": spectrum["adj_mat_comps"],
+      "motif_adj_mat_comps": spectrum["motif_adj_mat_comps"],
+      "vals": spectrum["vals"],
+      "vects": spectrum["vects"],
+      "clusts": cluster_assigns,
   }
-
-  return ans

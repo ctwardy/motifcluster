@@ -50,10 +50,9 @@ def _get_first_eigs(some_mat, num_eigs):
     ordering = np.argsort(vals.real)
     vals = vals.real[ordering]
     vects = vects.real[:, ordering]
-    vals = vals[0:num_eigs]
+    vals = vals[:num_eigs]
     vects = vects[:, 0:num_eigs]
 
-  # get spectrum for few eigs
   else:
 
     # make sure matrix is sparse
@@ -65,13 +64,7 @@ def _get_first_eigs(some_mat, num_eigs):
     vals = vals.real[ordering]
     vects = vects.real[:, ordering]
 
-  # return a list
-  spectrum = {
-    "vects": vects,
-    "vals": vals
-  }
-
-  return spectrum
+  return {"vects": vects, "vals": vals}
 
 
 def build_laplacian(adj_mat, type_lap="rw"):
@@ -167,9 +160,7 @@ def run_laplace_embedding(adj_mat, num_eigs, type_lap="rw"):
 
   # build and embed Laplacian
   laplacian = build_laplacian(adj_mat, type_lap)
-  spectrum = _get_first_eigs(laplacian, num_eigs)
-
-  return spectrum
+  return _get_first_eigs(laplacian, num_eigs)
 
 
 def run_motif_embedding(adj_mat, motif_name,
@@ -290,15 +281,12 @@ def run_motif_embedding(adj_mat, motif_name,
     spect = run_laplace_embedding(motif_adj_mat, num_eigs, type_lap)
 
 
-  # return list
-  embedding = {
-    "adj_mat": adj_mat,
-    "motif_adj_mat": motif_adj_mat,
-    "comps": comps,
-    "adj_mat_comps": adj_mat_comps,
-    "motif_adj_mat_comps": motif_adj_mat_comps,
-    "vals": spect["vals"],
-    "vects": spect["vects"],
+  return {
+      "adj_mat": adj_mat,
+      "motif_adj_mat": motif_adj_mat,
+      "comps": comps,
+      "adj_mat_comps": adj_mat_comps,
+      "motif_adj_mat_comps": motif_adj_mat_comps,
+      "vals": spect["vals"],
+      "vects": spect["vects"],
   }
-
-  return embedding

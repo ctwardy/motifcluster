@@ -26,9 +26,7 @@ def _build_G(adj_mat):
     The adjacency matrix in sparse form.
   """
 
-  G = adj_mat
-
-  return G
+  return adj_mat
 
 
 def _build_J(adj_mat):
@@ -52,12 +50,8 @@ def _build_J(adj_mat):
 
   G = _build_G(adj_mat)
 
-  if sparse.issparse(adj_mat):
-    J = mcut._drop0_killdiag(G > 0)
-  else:
-    J = mcut._drop0_killdiag(1 * (G > 0))
-
-  return J
+  return (mcut._drop0_killdiag(G > 0)
+          if sparse.issparse(adj_mat) else mcut._drop0_killdiag(1 * (G > 0)))
 
 
 def _build_Gs(adj_mat):
@@ -82,12 +76,8 @@ def _build_Gs(adj_mat):
   G = _build_G(adj_mat)
   J = _build_J(adj_mat)
 
-  if sparse.issparse(adj_mat):
-    Gs = mcut._drop0_killdiag(G - G.multiply(J.T))
-  else:
-    Gs = mcut._drop0_killdiag(G - G * J.T)
-
-  return Gs
+  return (mcut._drop0_killdiag(G - G.multiply(J.T))
+          if sparse.issparse(adj_mat) else mcut._drop0_killdiag(G - G * J.T))
 
 
 def _build_Js(adj_mat):
@@ -111,12 +101,8 @@ def _build_Js(adj_mat):
 
   Gs = _build_Gs(adj_mat)
 
-  if sparse.issparse(adj_mat):
-    Js = mcut._drop0_killdiag(Gs > 0)
-  else:
-    Js = mcut._drop0_killdiag(1 * (Gs > 0))
-
-  return Js
+  return (mcut._drop0_killdiag(Gs > 0)
+          if sparse.issparse(adj_mat) else mcut._drop0_killdiag(1 * (Gs > 0)))
 
 
 def _build_Gd(adj_mat):
@@ -141,12 +127,9 @@ def _build_Gd(adj_mat):
   J = _build_J(adj_mat)
   G = _build_G(adj_mat)
 
-  if sparse.issparse(adj_mat):
-    Gd = mcut._drop0_killdiag((G + G.T).multiply(J).multiply(J.T))
-  else:
-    Gd = mcut._drop0_killdiag((G + G.T) * J * J.T)
-
-  return Gd
+  return (mcut._drop0_killdiag((G + G.T).multiply(J).multiply(J.T))
+          if sparse.issparse(adj_mat) else mcut._drop0_killdiag(
+              (G + G.T) * J * J.T))
 
 
 def _build_Jd(adj_mat):
@@ -170,12 +153,8 @@ def _build_Jd(adj_mat):
 
   Gd = _build_Gd(adj_mat)
 
-  if sparse.issparse(adj_mat):
-    Jd = mcut._drop0_killdiag(Gd > 0)
-  else:
-    Jd = mcut._drop0_killdiag(1 * (Gd > 0))
-
-  return Jd
+  return (mcut._drop0_killdiag(Gd > 0)
+          if sparse.issparse(adj_mat) else mcut._drop0_killdiag(1 * (Gd > 0)))
 
 
 def _build_J0(adj_mat):
@@ -199,12 +178,8 @@ def _build_J0(adj_mat):
 
   G = _build_G(adj_mat)
 
-  if sparse.issparse(adj_mat):
-    J0 = sparse.csr_matrix(mcut._drop0_killdiag((G + G.T) == 0))
-  else:
-    J0 = mcut._drop0_killdiag((G + G.T) == 0)
-
-  return J0
+  return (sparse.csr_matrix(mcut._drop0_killdiag((G + G.T) == 0)) if
+          sparse.issparse(adj_mat) else mcut._drop0_killdiag((G + G.T) == 0))
 
 
 def _build_Jn(adj_mat):
@@ -228,12 +203,9 @@ def _build_Jn(adj_mat):
 
   n = adj_mat.shape[0]
 
-  if sparse.issparse(adj_mat):
-    Jn = sparse.csr_matrix(mcut._drop0_killdiag(np.ones((n, n))))
-  else:
-    Jn = mcut._drop0_killdiag(np.ones((n, n)))
-
-  return Jn
+  return (sparse.csr_matrix(mcut._drop0_killdiag(np.ones(
+      (n, n)))) if sparse.issparse(adj_mat) else mcut._drop0_killdiag(
+          np.ones((n, n))))
 
 
 def _build_Id(adj_mat):
@@ -257,12 +229,7 @@ def _build_Id(adj_mat):
 
   n = adj_mat.shape[0]
 
-  if sparse.issparse(adj_mat):
-    Id = sparse.identity(n)
-  else:
-    Id = np.identity(n)
-
-  return Id
+  return sparse.identity(n) if sparse.issparse(adj_mat) else np.identity(n)
 
 
 def _build_Je(adj_mat):
@@ -286,9 +253,7 @@ def _build_Je(adj_mat):
 
   G = _build_G(adj_mat)
   Id = _build_Id(adj_mat)
-  Je = Id + ((G + G.T) > 0)
-
-  return Je
+  return Id + ((G + G.T) > 0)
 
 
 def _build_Gp(adj_mat):
@@ -312,9 +277,5 @@ def _build_Gp(adj_mat):
 
   G = _build_G(adj_mat)
 
-  if sparse.issparse(adj_mat):
-    Gp = mcut._drop0_killdiag(G.multiply(G.T))
-  else:
-    Gp = mcut._drop0_killdiag(G * G.T)
-
-  return Gp
+  return (mcut._drop0_killdiag(G.multiply(G.T))
+          if sparse.issparse(adj_mat) else mcut._drop0_killdiag(G * G.T))

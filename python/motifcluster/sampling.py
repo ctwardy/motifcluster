@@ -77,12 +77,7 @@ def sample_dsbm(block_sizes, connection_matrix,
       p = connection_matrix[i, j]
 
       # generate block
-      if sample_weight_type == "unweighted":
-        w = 1
-
-      else:
-        w = weight_matrix[i, j]
-
+      w = 1 if sample_weight_type == "unweighted" else weight_matrix[i, j]
       block = mcut._random_sparse_matrix(ni, nj, p, sample_weight_type, w)
       row_list.append(block)
 
@@ -182,11 +177,8 @@ def sample_bsbm(source_block_sizes, dest_block_sizes,
   else:
     weight_matrix = None
 
-  # sample BSBM
-  adj_mat = sample_dsbm(block_sizes, connection_matrix,
-                        weight_matrix, sample_weight_type)
-
-  return adj_mat
+  return sample_dsbm(block_sizes, connection_matrix, weight_matrix,
+                     sample_weight_type)
 
 
 def demonstration_graph():
@@ -222,9 +214,7 @@ def demonstration_graph():
 
   adj_mat_sparse = sparse.csr_matrix(adj_mat_dense)
 
-  ans = {
-    "adj_mat_dense": adj_mat_dense,
-    "adj_mat_sparse": adj_mat_sparse,
+  return {
+      "adj_mat_dense": adj_mat_dense,
+      "adj_mat_sparse": adj_mat_sparse,
   }
-
-  return ans
