@@ -25,7 +25,7 @@ def test_sample_dsbm_unweighted():
 
   G = np.zeros((5, 5))
 
-  for rep in range(n_reps):
+  for _ in range(n_reps):
     G += mcsa.sample_dsbm(block_sizes, connection_matrix, weight_matrix,
                           sample_weight_type)
 
@@ -63,7 +63,7 @@ def test_sample_dsbm_constant_weighted():
 
   G = np.zeros((5, 5))
 
-  for rep in range(n_reps):
+  for _ in range(n_reps):
     G += mcsa.sample_dsbm(block_sizes, connection_matrix, weight_matrix,
                           sample_weight_type)
 
@@ -101,7 +101,7 @@ def test_sample_dsbm_poisson_weighted():
 
   G = np.zeros((5, 5))
 
-  for rep in range(n_reps):
+  for _ in range(n_reps):
     G += mcsa.sample_dsbm(block_sizes, connection_matrix, weight_matrix,
                           sample_weight_type)
 
@@ -156,7 +156,7 @@ def test_sample_bsbm_unweighted():
 
   G = np.zeros((6, 6))
 
-  for rep in range(n_reps):
+  for _ in range(n_reps):
     G += mcsa.sample_bsbm(source_block_sizes, dest_block_sizes, bipartite_connection_matrix,
                        bipartite_weight_matrix, sample_weight_type)
 
@@ -196,7 +196,7 @@ def test_sample_bsbm_constant_weighted():
 
   G = np.zeros((6, 6))
 
-  for rep in range(n_reps):
+  for _ in range(n_reps):
     G += mcsa.sample_bsbm(source_block_sizes, dest_block_sizes, bipartite_connection_matrix,
                        bipartite_weight_matrix, sample_weight_type)
 
@@ -236,7 +236,7 @@ def test_sample_bsbm_poisson_weighted():
 
   G = np.zeros((6, 6))
 
-  for rep in range(n_reps):
+  for _ in range(n_reps):
     G += mcsa.sample_bsbm(source_block_sizes, dest_block_sizes, bipartite_connection_matrix,
                        bipartite_weight_matrix, sample_weight_type)
 

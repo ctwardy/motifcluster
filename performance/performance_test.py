@@ -51,8 +51,10 @@ def performance_trial(ns, k, motifs, method, nreps, graph_type):
               ", time = {:.3f}".format(dt), sep="")
 
   # save results
-  results.to_csv("results/python_k" + str(k) + "_" + method +
-                 "_" + graph_type + ".csv", index=False)
+  results.to_csv(
+      (((f"results/python_k{str(k)}_" + method + "_") + graph_type) + ".csv"),
+      index=False,
+  )
 
   return None
 

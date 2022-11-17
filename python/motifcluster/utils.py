@@ -41,9 +41,7 @@ def _a_b_one(a_mat, b_mat):
 
   n = a_mat.shape[0]
   ones_vec = np.ones(n)
-  ans = (a_mat.T.multiply(b_mat @ ones_vec)).T
-
-  return ans
+  return (a_mat.T.multiply(b_mat @ ones_vec)).T
 
 
 def _a_one_b(a_mat, b_mat):
@@ -78,9 +76,7 @@ def _a_one_b(a_mat, b_mat):
 
   n = a_mat.shape[0]
   ones_vec = np.ones(n)
-  ans = (a_mat.multiply(ones_vec @ b_mat))
-
-  return ans
+  return (a_mat.multiply(ones_vec @ b_mat))
 
 
 def _drop0_killdiag(some_mat):
@@ -106,13 +102,11 @@ def _drop0_killdiag(some_mat):
 
   if sparse.issparse(some_mat):
     I = sparse.identity(some_mat.shape[0])
-    ans = some_mat - I.multiply(some_mat)
+    return some_mat - I.multiply(some_mat)
 
   else:
     I = np.identity(some_mat.shape[0])
-    ans = some_mat - some_mat * I
-
-  return ans
+    return some_mat - some_mat * I
 
 
 def get_largest_component(adj_mat, gr_method):
@@ -150,13 +144,11 @@ def get_largest_component(adj_mat, gr_method):
 
     gr = nx.from_scipy_sparse_array(adj_mat > 0)
 
+  elif isinstance(adj_mat, np.ndarray): # pylint: disable=else-if-used
+    gr = nx.from_numpy_array(1 * np.array(adj_mat > 0))
+
   else:
-
-    if isinstance(adj_mat, np.ndarray): # pylint: disable=else-if-used
-      gr = nx.from_numpy_array(1 * np.array(adj_mat > 0))
-
-    else:
-      gr = nx.from_numpy_array(1 * (adj_mat > 0).toarray())
+    gr = nx.from_numpy_array(1 * (adj_mat > 0).toarray())
 
   verts_to_keep = max(nx.connected_components(gr), key=len)
   verts_to_keep = sorted(verts_to_keep)
@@ -180,12 +172,10 @@ def get_motif_names():
   motif_names = ["Ms", "Md"]
 
   for i in range(1, 14):
-    motif_name = "M" + str(i)
+    motif_name = f"M{str(i)}"
     motif_names = motif_names + [motif_name]
 
-  motif_names = motif_names + ["Mcoll"] + ["Mexpa"]
-
-  return motif_names
+  return motif_names + ["Mcoll"] + ["Mexpa"]
 
 
 def _random_sparse_matrix(m, n, p, sample_weight_type="constant", w=1):
@@ -239,11 +229,8 @@ def _random_sparse_matrix(m, n, p, sample_weight_type="constant", w=1):
   if mn <= 1e4:
     ans = np.zeros(mn)
     ans[np.array(inds, dtype=int)] = np.array(vals, dtype=int)
-    ans = ans.reshape((m, n))
-
-  # create large matrix
   else:
     ans = sparse.csc_matrix((vals, (inds, zs)), shape=(mn, 1))
-    ans = ans.reshape((m, n))
+  ans = ans.reshape((m, n))
 
   return ans

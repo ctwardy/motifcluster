@@ -53,7 +53,7 @@ def test_run_motif_clustering():
   num_clusts = 3
 
   for sample_weight_type in ["unweighted", "constant", "poisson"]:
-    for motif_name in mcut.get_motif_names()[0:15]:
+    for motif_name in mcut.get_motif_names()[:15]:
       for mam_weight_type in ["unweighted", "mean", "product"]:
         for type_lap in ["comb", "rw"]:
 
